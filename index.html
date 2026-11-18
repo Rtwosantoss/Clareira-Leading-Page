@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Clareira – App educativo para crianças de 3 a 8 anos</title>
+
+
+<meta name="description" content="Clareira: app educativo em português para crianças de 3 a 8 anos, com histórias, lendas do folclore, pintura, músicas e jogos. Pagamento único.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Layout: página de vendas em faixas de cor, botões "chunky" com sombra sólida, mascote que segue o cursor, celulares com telas reais do app. */
+:root{
+  --bg:#FFF9F0; --ink:#1D3727; --mute:#53695B; --card:#FFFFFF; --line:#E6DCC6;
+  --band:#EAF4E1; --hero-a:#CBE7EF; --hero-b:#FFF9F0;
+  --moss:#2F7A4C; --moss-d:#1F5A3A; --orange:#E8742A; --orange-d:#B8561B;
+  --sun:#F4B93B; --sun-d:#C98F12; --plum:#3B2A78; --plum-2:#8A4FA0; --cream:#FFF4E6; --on-dark:#F2F8EC;
+  --shadow:rgba(31,90,58,.18);
+  --display:'Baloo 2','Trebuchet MS',system-ui,sans-serif; --body:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0F2519; --ink:#EAF3E4; --mute:#A9C0B0; --card:#17382A; --line:#2A4B39; --band:#143122; --hero-a:#1B4A36; --hero-b:#0F2519; --shadow:rgba(0,0,0,.4); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F2519; --ink:#EAF3E4; --mute:#A9C0B0; --card:#17382A; --line:#2A4B39; --band:#143122; --hero-a:#1B4A36; --hero-b:#0F2519; --shadow:rgba(0,0,0,.4); color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:600 18px/1.55 var(--body);padding-left:max(0px,env(safe-area-inset-left,0px));padding-right:max(0px,env(safe-area-inset-right,0px));overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--bg)}
+img{display:block;max-width:100%}
+h1,h2,h3{font-family:var(--display);font-weight:800;line-height:1.04;margin:0;text-wrap:balance}
+h1{font-size:clamp(2.7rem,7vw,5rem);letter-spacing:-.5px}
+h2{font-size:clamp(2.1rem,5vw,3.4rem)}
+h3{font-size:1.45rem;line-height:1.15}
+p{margin:0}
+a{color:inherit}
+.wrap{width:100%;max-width:1120px;margin:0 auto;padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}
+.eyebrow{font:800 .82rem/1 var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--orange)}
+:focus-visible{outline:3px solid var(--sun);outline-offset:3px;border-radius:10px}
+
+/* botões chunky */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:0;cursor:pointer;text-decoration:none;font:800 1.05rem/1 var(--display);letter-spacing:.06em;text-transform:uppercase;color:#fff;background:var(--orange);padding:18px 30px;border-radius:18px;box-shadow:0 6px 0 var(--orange-d);transition:transform .12s,box-shadow .12s,filter .15s;position:relative;white-space:nowrap}
+.btn:hover{filter:brightness(1.06);transform:translateY(-2px);box-shadow:0 8px 0 var(--orange-d)}
+.btn:active{transform:translateY(5px);box-shadow:0 1px 0 var(--orange-d)}
+.btn.ghost{background:var(--card);color:var(--moss);border:2px solid var(--line);box-shadow:0 6px 0 var(--line)}
+.btn.ghost:active{box-shadow:0 1px 0 var(--line)}
+.btn.sun{background:var(--sun);color:#3a2a05;box-shadow:0 6px 0 var(--sun-d)}
+.btn.sun:active{box-shadow:0 1px 0 var(--sun-d)}
+.btn.big{font-size:1.25rem;padding:22px 38px}
+.btn.sm{font-size:.9rem;padding:13px 20px;border-radius:14px;box-shadow:0 4px 0 var(--orange-d)}
+.btn.sm:active{box-shadow:0 1px 0 var(--orange-d);transform:translateY(3px)}
+
+/* cabeçalho */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:2px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:18px;padding-block:12px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font:800 1.9rem/1 var(--display);color:var(--moss)}
+:root[data-theme="dark"] .brand{color:var(--on-dark)}
+.brand svg{width:42px;height:42px}
+.nav{margin-left:auto;display:flex;gap:6px;align-items:center}
+.nav a.l{padding:10px 14px;border-radius:12px;text-decoration:none;font:800 .95rem/1 var(--display);letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
+.nav a.l:hover{background:var(--band);color:var(--ink)}
+.prog{position:absolute;left:0;bottom:-2px;height:5px;width:0;background:linear-gradient(90deg,var(--sun),var(--orange));border-radius:0 5px 5px 0}
+@media(max-width:760px){.nav a.l{display:none}.brand{font-size:1.6rem}}
+
+/* hero */
+.hero{background:linear-gradient(180deg,var(--hero-a),var(--hero-b));position:relative;overflow:hidden;padding-block:52px 70px}
+.hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:36px;align-items:center}
+.hero h1 em{font-style:normal;color:var(--orange);position:relative;white-space:nowrap}
+.hero h1 em::after{content:"";position:absolute;left:0;right:0;bottom:-.06em;height:.16em;background:var(--sun);border-radius:99px;z-index:-1;transform:scaleX(0);transform-origin:left;animation:ul 1s .5s cubic-bezier(.3,1.4,.5,1) forwards}
+@keyframes ul{to{transform:scaleX(1)}}
+.hero .lead{font-size:1.28rem;color:var(--mute);margin-top:20px;max-width:34ch}
+.cta-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:30px}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.chip{background:var(--card);border:2px solid var(--line);border-bottom-width:4px;border-radius:99px;padding:7px 15px;font:800 .9rem/1 var(--body);color:var(--moss)}
+:root[data-theme="dark"] .chip{color:var(--on-dark)}
+.stage{position:relative;display:grid;place-items:center;min-height:620px}
+.phone{position:relative;width:min(290px,70vw);aspect-ratio:9/19;border-radius:46px;background:#15181c;padding:11px;box-shadow:0 30px 60px var(--shadow),inset 0 0 0 3px #3a3f45;transition:transform .2s ease-out;will-change:transform}
+.phone .scr{position:relative;width:100%;height:100%;border-radius:36px;overflow:hidden;background:#000}
+.phone video,.phone .scr>img{width:100%;height:100%;object-fit:cover;display:block}
+.phone::after{content:"";position:absolute;top:19px;left:50%;width:78px;height:20px;margin-left:-39px;border-radius:12px;background:#15181c;z-index:3}
+.play{position:absolute;inset:0;z-index:2;display:grid;place-items:center;border:0;background:linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.45));cursor:pointer;color:#fff;font:800 1rem/1 var(--display);letter-spacing:.06em;text-transform:uppercase;transition:opacity .25s}
+.play .b{display:grid;place-items:center;gap:12px}
+.play .tri{width:84px;height:84px;border-radius:50%;background:var(--orange);box-shadow:0 6px 0 var(--orange-d);display:grid;place-items:center;animation:pulse 1.8s infinite}
+.play .tri::before{content:"";margin-left:8px;border-left:26px solid #fff;border-top:16px solid transparent;border-bottom:16px solid transparent}
+.play.off{opacity:0;pointer-events:none}
+@keyframes pulse{50%{transform:scale(1.09)}}
+.fl{position:absolute;pointer-events:none;filter:drop-shadow(0 10px 10px rgba(0,0,0,.18));animation:bob 4.2s ease-in-out infinite;will-change:transform}
+.fl img{height:100%;width:auto}
+@keyframes bob{50%{transform:translateY(-14px) rotate(3deg)}}
+.leaf{position:absolute;width:46px;height:46px;border-radius:0 100% 0 100%;background:var(--moss);opacity:.14;animation:drift 14s linear infinite}
+@keyframes drift{from{transform:translateY(-60px) rotate(0)}to{transform:translateY(760px) rotate(300deg)}}
+@media(max-width:900px){
+  .hero .wrap{grid-template-columns:1fr;text-align:center}
+  .hero .lead{margin-inline:auto}.cta-row,.chips{justify-content:center}
+  .stage{min-height:560px;margin-top:10px}
+}
+
+/* faixa que corre */
+.strip{background:var(--orange);color:#fff;overflow:hidden;border-block:3px solid var(--orange-d);transform:rotate(-1deg);margin:-20px -10px 0;position:relative;z-index:2}
+.strip .tr{display:flex;gap:44px;width:max-content;padding:16px 0;font:800 1.4rem/1 var(--display);letter-spacing:.08em;text-transform:uppercase;animation:run 30s linear infinite}
+.strip .tr span::after{content:"✦";margin-left:44px;color:var(--sun)}
+@keyframes run{to{transform:translateX(-50%)}}
+
+/* números */
+.nums{padding-block:84px 30px}
+.nums .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.num{background:var(--card);border:2px solid var(--line);border-bottom-width:6px;border-radius:24px;padding:22px 14px;text-align:center;transition:transform .2s}
+.num:hover{transform:translateY(-6px) rotate(-1.5deg)}
+.num b{display:block;font:800 3.4rem/1 var(--display);color:var(--moss)}
+:root[data-theme="dark"] .num b{color:var(--sun)}
+.num span{font-weight:800;color:var(--mute)}
+@media(max-width:700px){.nums .grid{grid-template-columns:repeat(2,1fr)}.num b{font-size:2.8rem}}
+
+/* blocos de recurso */
+.feat{padding-block:84px}
+.feat .wrap{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+.feat.rev .wrap>.txt{order:2}
+.feat .txt p{margin-top:18px;color:var(--mute);font-size:1.15rem;max-width:44ch}
+.feat .txt h2{margin-top:12px}
+.ul{list-style:none;padding:0;margin:22px 0 0;display:grid;gap:10px}
+.ul li{display:flex;gap:12px;align-items:center;font-weight:800}
+.ul li::before{content:"";flex:none;width:26px;height:26px;border-radius:50%;background:var(--moss) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4 8-9' fill='none' stroke='white' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/70% no-repeat;box-shadow:0 3px 0 var(--moss-d)}
+.shot{position:relative;display:grid;place-items:center;min-height:520px}
+.shot .phone{width:min(270px,68vw)}
+.shot .phone.b{position:absolute;right:2%;top:70px;width:min(210px,50vw);transform:rotate(8deg);opacity:.98}
+.shot .phone.a{transform:rotate(-5deg);margin-right:60px}
+@media(max-width:900px){
+  .feat .wrap{grid-template-columns:1fr;gap:30px;text-align:center}
+  .feat.rev .wrap>.txt{order:0}
+  .feat .txt p{margin-inline:auto}.ul{justify-items:center}
+  .shot{min-height:480px}
+}
+.band{background:var(--band)}
+.plum{background:linear-gradient(180deg,var(--plum),var(--plum-2));color:var(--on-dark);position:relative}
+.plum .txt p{color:#E8DDF5}
+.plum .eyebrow{color:var(--sun)}
+.wave{display:block;width:100%;height:46px;margin-bottom:-1px}
+.cast{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+.cast figure{margin:0;background:rgba(255,255,255,.93);border-radius:20px;border-bottom:5px solid rgba(0,0,0,.18);padding:8px 8px 6px;text-align:center;width:92px;color:#2E1F4A;font:800 .8rem/1.1 var(--display);transition:transform .2s;animation:bob 4s ease-in-out infinite}
+.cast figure:nth-child(even){animation-delay:-1.4s}
+.cast figure:hover{transform:translateY(-8px) rotate(-4deg)}
+.cast img{height:64px;margin:0 auto 4px;width:auto}
+.stories{display:flex;gap:14px;overflow:hidden;margin-top:30px}
+.stories .row{display:flex;gap:14px;width:max-content;animation:run 40s linear infinite}
+.stories img{width:200px;height:150px;object-fit:cover;border-radius:20px;border-bottom:5px solid rgba(0,0,0,.2)}
+
+/* teste de pintura */
+.paintbox{background:var(--card);border:2px solid var(--line);border-bottom-width:7px;border-radius:30px;padding:22px;display:grid;gap:16px;justify-items:center;width:min(100%,440px);margin-inline:auto}
+.paintbox svg{width:min(260px,70vw);height:auto;cursor:pointer;touch-action:manipulation;overflow:visible}
+.paintbox .part{transition:fill .25s;cursor:pointer}
+.paintbox .part:hover{filter:brightness(1.08)}
+.sw{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.sw button{width:42px;height:42px;border-radius:50%;border:4px solid var(--card);box-shadow:0 0 0 2px var(--line),0 4px 0 rgba(0,0,0,.18);cursor:pointer;transition:transform .15s}
+.sw button:hover{transform:scale(1.14)}
+.sw button[aria-pressed="true"]{box-shadow:0 0 0 4px var(--ink),0 4px 0 rgba(0,0,0,.18);transform:scale(1.12)}
+.hint{font-weight:800;color:var(--mute);font-size:.95rem;text-align:center}
+
+/* música */
+.songs{list-style:none;padding:0;margin:22px 0 0;display:grid;gap:10px;max-width:440px}
+.songs li{display:flex;align-items:center;gap:14px;background:var(--card);border:2px solid var(--line);border-bottom-width:5px;border-radius:18px;padding:12px 16px;font-weight:800;transition:transform .15s}
+.songs li:hover{transform:translateX(6px)}
+.eq{display:flex;gap:3px;align-items:flex-end;height:22px;flex:none}
+.eq i{width:5px;border-radius:3px;background:var(--orange);animation:eq 1s ease-in-out infinite}
+.eq i:nth-child(1){height:60%;animation-delay:-.2s}.eq i:nth-child(2){height:100%;animation-delay:-.5s}.eq i:nth-child(3){height:45%;animation-delay:-.8s}.eq i:nth-child(4){height:80%;animation-delay:-.35s}
+@keyframes eq{50%{transform:scaleY(.35)}}
+.eq{transform-origin:bottom}.eq i{transform-origin:bottom}
+
+/* aprender */
+.tiles{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+.tile{width:84px;height:96px;border:0;border-radius:20px;color:#fff;font:800 3.2rem/1 var(--display);cursor:pointer;box-shadow:0 7px 0 rgba(0,0,0,.22);transition:transform .12s,box-shadow .12s}
+.tile:active,.tile.pop{transform:translateY(6px) scale(.96);box-shadow:0 1px 0 rgba(0,0,0,.22)}
+.tile.n{width:62px;height:70px;font-size:2.3rem;border-radius:16px}
+.tiles+.tiles{margin-top:16px}
+.learn{background:var(--card);border:2px solid var(--line);border-bottom-width:7px;border-radius:30px;padding:26px 20px;display:grid;gap:6px;justify-items:center}
+
+/* pais */
+.parents{background:var(--moss-d);color:var(--on-dark);padding-block:90px;position:relative}
+.parents h2{text-align:center}
+.parents .sub{text-align:center;color:#CFE3D3;margin:14px auto 0;max-width:46ch}
+.pgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:40px}
+.pcard{background:var(--moss);border-radius:24px;border-bottom:7px solid rgba(0,0,0,.25);padding:26px 20px;text-align:center;transition:transform .2s}
+.pcard:hover{transform:translateY(-8px) rotate(1deg)}
+.pcard svg{width:58px;height:58px;margin:0 auto 12px}
+.pcard h3{font-size:1.25rem}
+.pcard p{color:#D8EBDC;margin-top:8px;font-size:1rem}
+@media(max-width:900px){.pgrid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.pgrid{grid-template-columns:1fr}}
+
+/* passos */
+.steps{padding-block:90px}
+.steps h2{text-align:center}
+.sgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:44px;position:relative}
+.step{background:var(--card);border:2px solid var(--line);border-bottom-width:7px;border-radius:28px;padding:28px 22px;text-align:center;position:relative;transition:transform .2s}
+.step:hover{transform:translateY(-8px)}
+.step .n{width:62px;height:62px;border-radius:50%;background:var(--sun);color:#3a2a05;font:800 1.9rem/62px var(--display);margin:0 auto 14px;box-shadow:0 5px 0 var(--sun-d)}
+.step p{color:var(--mute);margin-top:8px}
+@media(max-width:800px){.sgrid{grid-template-columns:1fr}}
+
+/* preço */
+.price{background:linear-gradient(180deg,var(--band),var(--bg));padding-block:90px}
+.pbox{max-width:560px;margin:34px auto 0;background:var(--card);border:3px solid var(--orange);border-bottom-width:9px;border-radius:36px;padding:38px 30px;text-align:center;position:relative}
+.pbox .tag{position:absolute;top:-20px;left:50%;transform:translateX(-50%) rotate(-3deg);background:var(--sun);color:#3a2a05;border-radius:99px;padding:9px 22px;font:800 1rem/1 var(--display);letter-spacing:.08em;text-transform:uppercase;box-shadow:0 4px 0 var(--sun-d);white-space:nowrap}
+.pbox .val{font:800 clamp(5rem,16vw,7.4rem)/1 var(--display);color:var(--orange);margin-top:14px}
+.pbox .val small{font-size:.38em;vertical-align:.9em;margin-right:6px}
+.pbox .once{font-weight:800;color:var(--mute)}
+.pbox .ul{justify-items:start;max-width:340px;margin:24px auto}
+.pbox .btn{width:100%}
+.seal{margin:26px auto 0;display:flex;align-items:center;gap:16px;text-align:left;max-width:380px}
+.seal b{display:grid;place-items:center;flex:none;width:76px;height:76px;border-radius:50%;background:var(--moss);color:#fff;font:800 2rem/1 var(--display);box-shadow:0 5px 0 var(--moss-d),inset 0 0 0 4px rgba(255,255,255,.35)}
+.seal span{font-weight:700;color:var(--mute);font-size:.98rem;line-height:1.35}
+
+/* faq */
+.faq{padding-block:90px}
+.faq h2{text-align:center}
+.qs{max-width:760px;margin:36px auto 0;display:grid;gap:12px}
+details{background:var(--card);border:2px solid var(--line);border-bottom-width:5px;border-radius:20px;transition:transform .15s}
+details[open]{border-color:var(--moss)}
+summary{list-style:none;cursor:pointer;padding:18px 22px;font:800 1.2rem/1.25 var(--display);display:flex;justify-content:space-between;gap:16px;align-items:center}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";flex:none;width:32px;height:32px;border-radius:50%;background:var(--band);display:grid;place-items:center;font:800 1.5rem/1 var(--display);color:var(--moss);transition:transform .25s}
+details[open] summary::after{transform:rotate(135deg)}
+details p{padding:0 22px 20px;color:var(--mute)}
+
+/* final */
+.final{background:var(--moss-d);color:var(--on-dark);text-align:center;padding-block:90px 60px;position:relative;overflow:hidden}
+.final h2{max-width:14ch;margin-inline:auto}
+.final .mascot{width:130px;margin:0 auto 18px}
+.final .mascot svg{width:100%;height:auto;animation:bob 3s ease-in-out infinite}
+.final p{color:#CFE3D3;margin-top:14px}
+.final .btn{margin-top:30px}
+footer{background:#163F2A;color:#CFE3D3;padding:32px max(18px,env(safe-area-inset-left,0px)) calc(32px + env(safe-area-inset-bottom,0px));text-align:center;font-size:.95rem;font-weight:700}
+footer a{color:#fff;margin:0 8px}
+footer .mail{display:block;margin-top:10px;user-select:all}
+
+/* barra fixa no celular */
+.sticky{position:fixed;left:0;right:0;bottom:0;z-index:55;display:flex;gap:12px;align-items:center;justify-content:space-between;padding:12px max(16px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));background:var(--card);border-top:3px solid var(--line);transform:translateY(120%);transition:transform .35s cubic-bezier(.3,1.3,.5,1)}
+.sticky.on{transform:none}
+.sticky b{font:800 1.5rem/1 var(--display);color:var(--orange)}
+.sticky small{display:block;font-weight:800;color:var(--mute);font-size:.8rem}
+@media(min-width:901px){.sticky{display:none}}
+
+/* revelar ao rolar */
+.js .rv.pre{opacity:0;transform:translateY(40px) scale(.96)}
+.rv{transition:opacity .6s ease,transform .7s cubic-bezier(.34,1.56,.64,1);transition-delay:var(--d,0s)}
+.toast{position:fixed;left:50%;bottom:90px;transform:translate(-50%,30px);background:var(--ink);color:var(--bg);padding:12px 20px;border-radius:14px;font-weight:800;z-index:80;opacity:0;transition:.3s;pointer-events:none;max-width:90vw;text-align:center}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.bit{position:fixed;z-index:90;pointer-events:none;width:12px;height:16px;border-radius:3px}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+  .js .rv.pre{opacity:1;transform:none}
+  .hero h1 em::after{transform:scaleX(1)}
+}
+</style>
+</head>
+<body>
+
+
+<div class="prog-wrap"></div>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#topo" aria-label="Clareira, início">
+      <svg viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r="18" fill="#2F7A4C"/><path d="M8 20 L11 6 L18 13 Z" fill="#E8742A"/><path d="M28 20 L25 6 L18 13 Z" fill="#E8742A"/><path d="M7 19 Q18 11 29 19 Q27 30 18 32 Q9 30 7 19 Z" fill="#E8742A"/><path d="M11 24 Q18 22 25 24 Q23 30 18 32 Q13 30 11 24 Z" fill="#FFF4E6"/><circle cx="13.5" cy="21" r="1.7" fill="#2A2118"/><circle cx="22.5" cy="21" r="1.7" fill="#2A2118"/><circle cx="18" cy="29" r="1.8" fill="#2A2118"/></svg>
+      Clareira
+    </a>
+    <nav class="nav" aria-label="Seções">
+      <a class="l" href="#recursos">O app</a>
+      <a class="l" href="#folclore">Folclore</a>
+      <a class="l" href="#pais">Pais</a>
+      <a class="l" href="#faq">Dúvidas</a>
+      <a class="btn sm" href="#preco" data-buy>Quero o Clareira</a>
+    </nav>
+  </div>
+  <div class="prog" id="prog"></div>
+</header>
+
+<main id="topo">
+<section class="hero" id="hero">
+  <i class="leaf" style="left:6%;top:-40px;animation-delay:-3s"></i><i class="leaf" style="left:38%;top:-40px;animation-delay:-9s;width:30px;height:30px"></i><i class="leaf" style="left:72%;top:-40px;animation-delay:-6s"></i><i class="leaf" style="left:92%;top:-40px;animation-delay:-12s;width:34px;height:34px"></i>
+  <div class="wrap">
+    <div>
+      <p class="eyebrow">App educativo, de 3 a 8 anos</p>
+      <h1 style="margin-top:14px">Seu filho vai pedir <em>mais uma história.</em></h1>
+      <p class="lead">Histórias, lendas do folclore, pintura, músicas e jogos em português. Um pagamento único, sem mensalidade.</p>
+      <div class="cta-row">
+        <a class="btn big" href="#" data-app>Testar grátis</a>
+      </div>
+      <div class="chips"><span class="chip">Sem anúncios</span><span class="chip">Sem cadastro</span><span class="chip">Garantia de 7 dias</span></div>
+    </div>
+    <div class="stage">
+      <div class="fl" style="height:150px;left:0;top:30px;animation-delay:-1s" data-sp=".05"><img src="img/arara.webp" alt="" width="150" height="150"></div>
+      <div class="fl" style="height:170px;right:-4px;top:10px;animation-delay:-2.4s" data-sp=".08"><img src="img/coruja.webp" alt="" width="110" height="170"></div>
+      <div class="fl" style="height:190px;left:-10px;bottom:20px;animation-delay:-.4s" data-sp=".1"><img src="img/raposa.webp" alt="" width="123" height="190"></div>
+      <div class="fl" style="height:160px;right:-6px;bottom:40px;animation-delay:-3.1s" data-sp=".06"><img src="img/urso.webp" alt="" width="113" height="160"></div>
+      <div class="phone tilt" id="ph1">
+        <div class="scr">
+          <video id="v1" src="media/clareira-apresentacao.mp4" poster="media/poster-apresentacao.jpg" playsinline preload="metadata"></video>
+          <button class="play" id="p1" aria-label="Assistir ao vídeo de apresentação"><span class="b"><span class="tri"></span><span>Ver em 45 s</span></span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="strip" aria-hidden="true"><div class="tr"><span>Histórias</span><span>Lendas do Brasil</span><span>Pintura</span><span>Músicas</span><span>Jogos</span><span>Vogais e números</span><span>Histórias</span><span>Lendas do Brasil</span><span>Pintura</span><span>Músicas</span><span>Jogos</span><span>Vogais e números</span></div></div>
+
+<section class="nums">
+  <div class="wrap">
+    <div class="grid">
+      <div class="num rv"><b data-n="6">0</b><span>lendas do folclore</span></div>
+      <div class="num rv" style="--d:.08s"><b data-n="12">0</b><span>desenhos para pintar</span></div>
+      <div class="num rv" style="--d:.16s"><b data-n="6">0</b><span>músicas para cantar</span></div>
+      <div class="num rv" style="--d:.24s"><b data-n="5">0</b><span>jogos</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="feat" id="recursos">
+  <div class="wrap">
+    <div class="txt rv">
+      <p class="eyebrow">Histórias</p>
+      <h2>Histórias curtas para ler junto</h2>
+      <p>Contos com a Rufa, o Bento, a Lua e os outros amigos da Floresta. Feitas para os pais lerem em voz alta, com perguntas para conversar depois.</p>
+      <ul class="ul"><li>3 a 5 anos e 6 a 8 anos, cada um no seu ritmo</li><li>Ilustrações próprias em todas as histórias</li><li>Selo de leitor a cada história lida</li></ul>
+    </div>
+    <div class="shot rv" style="--d:.1s">
+      <div class="phone a tilt"><div class="scr"><img src="img/tela-02-historias.webp" alt="Tela de histórias do Clareira" width="540" height="1168" loading="lazy"></div></div>
+      <div class="phone b tilt"><div class="scr"><img src="img/tela-03-leitura.webp" alt="Página de uma história: Rufa e o Escuro" width="540" height="1168" loading="lazy"></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="plum" id="folclore">
+  <svg class="wave" viewBox="0 0 1200 46" preserveAspectRatio="none" aria-hidden="true" style="position:absolute;top:-1px;left:0;transform:scaleY(-1)"><path d="M0 0 C150 46 300 46 450 23 C600 0 750 0 900 23 C1050 46 1150 40 1200 20 V0 Z" style="fill:var(--bg)"/></svg>
+  <div class="feat rev" style="padding-block:110px 84px">
+    <div class="wrap">
+      <div class="txt rv">
+        <p class="eyebrow">Mundo do Folclore</p>
+        <h2>Lendas do Brasil, contadas com carinho</h2>
+        <p>Seis lendas com ilustrações próprias, escritas para pequenos leitores. Seu filho conhece personagens que fazem parte da cultura do país.</p>
+        <div class="cast" aria-label="Personagens do folclore">
+          <figure><img src="img/f_iara.webp" alt="" width="73" height="64" loading="lazy">Iara</figure>
+          <figure><img src="img/f_saci.webp" alt="" width="68" height="64" loading="lazy">Saci</figure>
+          <figure><img src="img/f_boto.webp" alt="" width="73" height="64" loading="lazy">Boto</figure>
+          <figure><img src="img/f_curupira.webp" alt="" width="64" height="64" loading="lazy">Curupira</figure>
+          <figure><img src="img/f_mula.webp" alt="" width="64" height="64" loading="lazy">Mula de Fogo</figure>
+          <figure><img src="img/f_lobisomem.webp" alt="" width="64" height="64" loading="lazy">Lobisomem</figure>
+        </div>
+      </div>
+      <div class="shot rv" style="--d:.1s">
+        <div class="phone a tilt"><div class="scr"><img src="img/tela-07-folclore.webp" alt="Mundo do Folclore no Clareira" width="540" height="1168" loading="lazy"></div></div>
+        <div class="phone b tilt"><div class="scr"><img src="img/tela-08-folclore-historias.webp" alt="História da Iara" width="540" height="1168" loading="lazy"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="wrap" style="padding-bottom:70px"><div class="stories" aria-hidden="true"><div class="row">
+    <img src="img/cena-iara-rio-limpo-0.jpg" alt="" width="200" height="118" loading="lazy"><img src="img/cena-saci-redemoinho-0.jpg" alt="" width="200" height="133" loading="lazy"><img src="img/cena-boto-canoa-0.jpg" alt="" width="200" height="133" loading="lazy"><img src="img/cena-curupira-frutas-0.jpg" alt="" width="200" height="133" loading="lazy"><img src="img/cena-mula-fogo-0.jpg" alt="" width="200" height="133" loading="lazy"><img src="img/cena-lobisomem-lua-0.jpg" alt="" width="200" height="150" loading="lazy">
+    <img src="img/cena-iara-rio-limpo-0.jpg" alt="" width="200" height="118" loading="lazy"><img src="img/cena-saci-redemoinho-0.jpg" alt="" width="200" height="133" loading="lazy"><img src="img/cena-boto-canoa-0.jpg" alt="" width="200" height="133" loading="lazy"><img src="img/cena-curupira-frutas-0.jpg" alt="" width="200" height="133" loading="lazy"><img src="img/cena-mula-fogo-0.jpg" alt="" width="200" height="133" loading="lazy"><img src="img/cena-lobisomem-lua-0.jpg" alt="" width="200" height="150" loading="lazy">
+  </div></div></div>
+</section>
+
+<section class="feat band">
+  <div class="wrap">
+    <div class="txt rv">
+      <p class="eyebrow">Pintura</p>
+      <h2>Pintar com um toque</h2>
+      <p>São 12 desenhos para colorir no celular ou no tablet. A criança escolhe uma cor entre 24 e toca na parte do desenho que quer pintar.</p>
+      <ul class="ul"><li>Sem sujeira e sem papel</li><li>Cada parte do desenho pinta separada</li><li>Dá para pintar de novo quantas vezes quiser</li></ul>
+    </div>
+    <div class="rv" style="--d:.1s">
+      <div class="paintbox">
+        <svg viewBox="0 0 200 190" id="fox" role="img" aria-label="Raposa para pintar: toque numa cor e depois numa parte">
+          <circle class="part" data-p="bg" cx="100" cy="95" r="92" fill="#CBE7EF"/>
+          <path class="part" data-p="ears" d="M42 98 L56 22 L100 62 Z M158 98 L144 22 L100 62 Z" fill="#E8742A"/>
+          <path class="part" data-p="head" d="M36 96 Q100 52 164 96 Q154 160 100 172 Q46 160 36 96 Z" fill="#E8742A"/>
+          <path class="part" data-p="muzzle" d="M62 126 Q100 118 138 126 Q128 164 100 172 Q72 164 62 126 Z" fill="#FFF4E6"/>
+          <g id="eyes"><circle cx="72" cy="112" r="10" fill="#fff"/><circle cx="128" cy="112" r="10" fill="#fff"/><circle id="eL" cx="72" cy="112" r="6" fill="#2A2118"/><circle id="eR" cx="128" cy="112" r="6" fill="#2A2118"/></g>
+          <circle cx="100" cy="152" r="9" fill="#2A2118" pointer-events="none"/>
+        </svg>
+        <div class="sw" id="sw" role="group" aria-label="Cores"></div>
+        <p class="hint" id="hint">Escolha uma cor e toque numa parte da raposa</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="feat rev">
+  <div class="wrap">
+    <div class="txt rv">
+      <p class="eyebrow">Músicas</p>
+      <h2>Músicas para cantar junto</h2>
+      <p>Cantigas feitas para aprender e para a rotina da criança, com a letra para acompanhar. O Hino Nacional também está lá, com a bandeira.</p>
+      <ul class="songs">
+        <li><span class="eq"><i></i><i></i><i></i><i></i></span>As cinco vogais</li>
+        <li><span class="eq"><i></i><i></i><i></i><i></i></span>Conta comigo, de 1 a 10</li>
+        <li><span class="eq"><i></i><i></i><i></i><i></i></span>Os sete dias da semana</li>
+        <li><span class="eq"><i></i><i></i><i></i><i></i></span>Escova, escova</li>
+        <li><span class="eq"><i></i><i></i><i></i><i></i></span>Banho de Rock</li>
+        <li><span class="eq"><i></i><i></i><i></i><i></i></span>Hino Nacional Brasileiro</li>
+      </ul>
+    </div>
+    <div class="shot rv" style="--d:.1s">
+      <div class="phone a tilt"><div class="scr"><img src="img/tela-05-musicas.webp" alt="Lista de músicas do Clareira" width="540" height="1168" loading="lazy"></div></div>
+      <div class="phone b tilt"><div class="scr"><img src="img/tela-06-player.webp" alt="Player do Hino Nacional" width="540" height="1168" loading="lazy"></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="feat band">
+  <div class="wrap">
+    <div class="txt rv">
+      <p class="eyebrow">Aprender brincando</p>
+      <h2>Vogais e números com voz de verdade</h2>
+      <p>Cada vogal, sílaba e número de 0 a 10 tem áudio gravado. A criança toca, ouve e repete. Experimente aqui ao lado.</p>
+      <ul class="ul"><li>Vogais e sílabas com áudio</li><li>Números de 0 a 10 falados</li><li>Letras para treinar a escrita</li></ul>
+    </div>
+    <div class="learn rv" style="--d:.1s">
+      <div class="tiles" id="vow"></div>
+      <div class="tiles" id="num"></div>
+      <p class="hint" style="margin-top:12px">Toque e ouça</p>
+    </div>
+  </div>
+</section>
+
+<section class="feat">
+  <div class="wrap">
+    <div class="txt rv">
+      <p class="eyebrow">Jogos e selos</p>
+      <h2>Brincar também vale um selo</h2>
+      <p>Jogo da velha, pedra-papel-tesoura, jogo da memória, sete erros e caça-palavras. Ler, pintar, cantar e jogar rende selos que abrem novos mundos.</p>
+      <ul class="ul"><li>Selos a cada conquista</li><li>Mundos que abrem conforme a criança avança</li><li>Um selo de cantor para quem ouve as músicas</li></ul>
+    </div>
+    <div class="shot rv" style="--d:.1s">
+      <div class="phone a tilt"><div class="scr"><img src="img/tela-09-selos.webp" alt="Tela de selos do Clareira" width="540" height="1168" loading="lazy"></div></div>
+      <div class="phone b tilt"><div class="scr"><img src="img/tela-04-pintar.webp" alt="Escolha de desenho para pintar" width="540" height="1168" loading="lazy"></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="feat band" id="tour">
+  <div class="wrap">
+    <div class="shot rv" style="min-height:0">
+      <div class="phone tilt"><div class="scr">
+        <video id="v2" src="media/clareira-tour.mp4" poster="media/poster-tour.jpg" playsinline preload="none"></video>
+        <button class="play" id="p2" aria-label="Assistir ao passeio pelo app"><span class="b"><span class="tri"></span><span>Passear pelo app</span></span></button>
+      </div></div>
+    </div>
+    <div class="txt rv" style="--d:.1s">
+      <p class="eyebrow">Por dentro do app</p>
+      <h2>Veja o Clareira funcionando</h2>
+      <p>Um passeio de 40 segundos pelas telas reais: histórias, pintura, músicas e o mundo do Folclore.</p>
+      <div class="cta-row"><a class="btn" href="#preco" data-buy>Quero o Clareira</a></div>
+    </div>
+  </div>
+</section>
+
+<section class="parents" id="pais">
+  <div class="wrap">
+    <p class="eyebrow" style="text-align:center;color:var(--sun)">Para os pais</p>
+    <h2 style="margin-top:12px">Tela de criança, com a cabeça tranquila</h2>
+    <p class="sub">O Clareira foi pensado para você deixar seu filho explorar sozinho, sem surpresas.</p>
+    <div class="pgrid">
+      <div class="pcard rv"><svg viewBox="0 0 64 64" fill="none" stroke="#F4B93B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="32" cy="32" r="24"/><path d="M15 15l34 34"/></svg><h3>Sem anúncios</h3><p>Nada de propaganda no meio da brincadeira.</p></div>
+      <div class="pcard rv" style="--d:.08s"><svg viewBox="0 0 64 64" fill="none" stroke="#F4B93B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="32" cy="22" r="10"/><path d="M12 54c2-12 10-18 20-18s18 6 20 18"/><path d="M8 8l48 48"/></svg><h3>Sem cadastro</h3><p>Seu filho não precisa de e-mail nem de login.</p></div>
+      <div class="pcard rv" style="--d:.16s"><svg viewBox="0 0 64 64" fill="none" stroke="#F4B93B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="18" y="8" width="28" height="48" rx="6"/><path d="M27 16h10"/><path d="M26 34l5 5 8-10"/></svg><h3>Dados só no aparelho</h3><p>O progresso fica salvo no celular. Não coletamos dados da criança.</p></div>
+      <div class="pcard rv" style="--d:.24s"><svg viewBox="0 0 64 64" fill="none" stroke="#F4B93B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="12" width="52" height="36" rx="5"/><path d="M22 56h20M32 48v8"/></svg><h3>Abre no navegador</h3><p>Funciona no celular, no tablet e no computador, sem baixar de loja.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="steps">
+  <div class="wrap">
+    <p class="eyebrow" style="text-align:center">Como funciona</p>
+    <h2 style="margin-top:12px">Pronto para brincar em três passos</h2>
+    <div class="sgrid">
+      <div class="step rv"><div class="n">1</div><h3>Faça a compra</h3><p>Um único pagamento, direto pela plataforma segura de vendas.</p></div>
+      <div class="step rv" style="--d:.1s"><div class="n">2</div><h3>Receba o código</h3><p>O endereço do app e o seu código de acesso chegam por e-mail.</p></div>
+      <div class="step rv" style="--d:.2s"><div class="n">3</div><h3>Abra e digite</h3><p>Toque em "Completo", digite o código e tudo é liberado.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="price" id="preco">
+  <div class="wrap">
+    <h2 style="text-align:center">Tudo isso por um pagamento só</h2>
+    <div class="pbox rv">
+      <span class="tag">Preço de lançamento</span>
+      <div class="val"><small>R$</small>37</div>
+      <p class="once">pagamento único, sem mensalidade</p>
+      <ul class="ul">
+        <li>Todas as histórias da Floresta</li><li>As 6 lendas do Folclore</li><li>12 desenhos para pintar</li><li>6 músicas com o Hino Nacional</li><li>Jogos, vogais, números e selos</li>
+      </ul>
+      <a class="btn big" href="#" data-buy>Quero o Clareira</a>
+      <div class="seal"><b>7</b><span><strong style="color:var(--ink)">Garantia de 7 dias.</strong> Se não gostar, devolvemos o valor pela plataforma, sem perguntas.</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="faq" id="faq">
+  <div class="wrap">
+    <h2>Perguntas frequentes</h2>
+    <div class="qs">
+      <details><summary>Para qual idade é o Clareira?</summary><p>Para crianças de 3 a 8 anos. As histórias têm versões de 3 a 5 e de 6 a 8 anos, e os jogos e músicas servem para a família toda.</p></details>
+      <details><summary>Funciona no celular? Preciso baixar na loja?</summary><p>Funciona no celular, no tablet e no computador, direto pelo navegador. Não precisa baixar de loja. No celular, dá para adicionar o atalho à tela inicial e abrir como um aplicativo.</p></details>
+      <details><summary>Como recebo o código de acesso?</summary><p>Logo depois do pagamento, você recebe um e-mail com o endereço do app e o código. Basta tocar em "Completo" dentro do app e digitar o código.</p></details>
+      <details><summary>Posso usar em mais de um aparelho?</summary><p>Sim. Em cada aparelho novo, é só digitar o mesmo código uma vez. Guarde o e-mail da compra para isso.</p></details>
+      <details><summary>Tem mensalidade ou compras dentro do app?</summary><p>Não tem mensalidade. A única compra é a do app completo, feita uma vez pelos pais, e não há anúncios.</p></details>
+      <details><summary>Precisa de internet?</summary><p>Sim, é preciso estar conectado para abrir o app e carregar histórias, músicas e vozes.</p></details>
+      <details><summary>E se eu não gostar?</summary><p>Você tem 7 dias de garantia. É só pedir o reembolso pela plataforma de pagamento, sem justificar.</p></details>
+      <details><summary>O app coleta dados do meu filho?</summary><p>Não. O nome e o progresso ficam salvos só no aparelho. Leia a <a href="privacidade.html" style="color:var(--orange)">Política de Privacidade</a>.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="final">
+  <div class="wrap">
+    <div class="mascot" id="mascot"><svg viewBox="0 0 36 36" aria-label="Raposa do Clareira"><circle cx="18" cy="18" r="18" fill="#FFF4E6"/><path d="M8 20 L11 6 L18 13 Z" fill="#E8742A"/><path d="M28 20 L25 6 L18 13 Z" fill="#E8742A"/><path d="M7 19 Q18 11 29 19 Q27 30 18 32 Q9 30 7 19 Z" fill="#E8742A"/><path d="M11 24 Q18 22 25 24 Q23 30 18 32 Q13 30 11 24 Z" fill="#FFF4E6"/><g id="mE"><circle cx="13.5" cy="21" r="1.7" fill="#2A2118"/><circle cx="22.5" cy="21" r="1.7" fill="#2A2118"/></g><circle cx="18" cy="29" r="1.8" fill="#2A2118"/></svg></div>
+    <h2>Hoje tem história nova</h2>
+    <p>Dê ao seu filho um cantinho de histórias, cores e músicas.</p>
+    <a class="btn sun big" href="#" data-buy>Quero por R$ 37</a>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div><a href="privacidade.html">Política de Privacidade</a>·<a href="termos.html">Termos de Uso</a></div>
+  <span class="mail">Dúvidas: r4f4santoss@gmail.com</span>
+  <p style="margin-top:10px">© 2026 Clareira</p>
+</footer>
+
+<div class="sticky" id="sticky"><div><b>R$ 37</b><small>pagamento único</small></div><a class="btn sm" href="#preco" data-buy>Quero o Clareira</a></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* Troque estes dois endereços quando tiver o link da Cakto e o endereço do app no ar. */
+var LINK_COMPRA='';
+var LINK_APP='https://clareira.selo-lgpd.workers.dev/';
+(function(){
+  var D=document,$=function(s,r){return (r||D).querySelector(s)},$$=function(s,r){return Array.prototype.slice.call((r||D).querySelectorAll(s))};
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  D.documentElement.classList.add('js');
+  var COLORS=['#E8453C','#E8742A','#F4B93B','#8BC34A','#2F7A4C','#4DA6D6','#7C4DFF','#C2417A','#8B5A2B','#FFF4E6'];
+  function toast(t){var e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(function(){e.classList.remove('on')},2600);}
+  function burst(x,y){if(reduce)return;for(var i=0;i<22;i++){var b=D.createElement('i');b.className='bit';b.style.background=COLORS[i%COLORS.length];b.style.left=x+'px';b.style.top=y+'px';D.body.appendChild(b);var a=Math.random()*Math.PI*2,v=90+Math.random()*160;b.animate([{transform:'translate(0,0) rotate(0)',opacity:1},{transform:'translate('+Math.cos(a)*v+'px,'+(Math.sin(a)*v+120)+'px) rotate('+(Math.random()*540)+'deg)',opacity:0}],{duration:900+Math.random()*500,easing:'cubic-bezier(.2,.7,.3,1)'}).onfinish=(function(n){return function(){n.remove()}})(b);}}
+  /* links de compra e do app */
+  $$('[data-buy]').forEach(function(a){a.addEventListener('click',function(e){var r=a.getBoundingClientRect();burst(r.left+r.width/2,r.top+r.height/2);if(LINK_COMPRA){e.preventDefault();window.open(LINK_COMPRA,'_blank','noopener');}else if(a.getAttribute('href')==='#'){e.preventDefault();toast('O link de compra ainda não foi configurado.');}});});
+  $$('[data-app]').forEach(function(a){if(LINK_APP){a.href=LINK_APP;a.target='_blank';a.rel='noopener';}});
+  /* barra de progresso e barra fixa */
+  var hero=$('#hero'),sticky=$('#sticky'),prog=$('#prog'),fls=$$('.fl'),ticking=false;
+  function onScroll(){var h=D.documentElement.scrollHeight-innerHeight;prog.style.width=(h>0?scrollY/h*100:0)+'%';var hb=hero.getBoundingClientRect().bottom;sticky.classList.toggle('on',hb<80);
+    if(!reduce)fls.forEach(function(f){f.style.translate='0 '+(scrollY*parseFloat(f.dataset.sp||0)*-1)+'px'});ticking=false;}
+  addEventListener('scroll',function(){if(!ticking){ticking=true;requestAnimationFrame(onScroll)}},{passive:true});onScroll();
+  /* revelar ao rolar (começa visível; só esconde o que está abaixo da dobra) */
+  var rv=$$('.rv');
+  if('IntersectionObserver' in window&&!reduce){
+    rv.forEach(function(e){if(e.getBoundingClientRect().top>innerHeight*.95)e.classList.add('pre');});
+    var io=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){x.target.classList.remove('pre');io.unobserve(x.target);}})},{threshold:.12,rootMargin:'0px 0px -6% 0px'});
+    rv.forEach(function(e){io.observe(e)});
+  }
+  /* contadores */
+  var cio=('IntersectionObserver' in window)?new IntersectionObserver(function(es){es.forEach(function(x){if(!x.isIntersecting)return;var el=x.target,n=+el.dataset.n,t0=null;cio.unobserve(el);if(reduce){el.textContent=n;return;}function step(t){if(!t0)t0=t;var p=Math.min(1,(t-t0)/1100),e=1-Math.pow(1-p,3);el.textContent=Math.round(n*e);if(p<1)requestAnimationFrame(step)}requestAnimationFrame(step);})},{threshold:.6}):null;
+  $$('[data-n]').forEach(function(e){if(cio)cio.observe(e);else e.textContent=e.dataset.n;});
+  /* inclinação dos celulares */
+  if(!reduce&&matchMedia('(hover:hover)').matches){$$('.tilt').forEach(function(p){var base=p.style.transform;p.addEventListener('pointermove',function(e){var r=p.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;p.style.transform='perspective(900px) rotateY('+x*14+'deg) rotateX('+(-y*10)+'deg)';});p.addEventListener('pointerleave',function(){p.style.transform=''});});}
+  /* vídeos */
+  var vids=[['#v1','#p1'],['#v2','#p2']].map(function(a){return {v:$(a[0]),p:$(a[1])}});
+  vids.forEach(function(o){
+    o.p.addEventListener('click',function(){vids.forEach(function(q){if(q!==o){q.v.pause();q.p.classList.remove('off');q.v.controls=false;}});o.v.currentTime=o.v.ended?0:o.v.currentTime;var pr=o.v.play();o.p.classList.add('off');o.v.controls=true;if(pr&&pr.catch)pr.catch(function(){o.p.classList.remove('off');});});
+    o.v.addEventListener('ended',function(){o.p.classList.remove('off');o.v.controls=false;});
+  });
+  /* teste de pintura */
+  var sw=$('#sw'),cur=COLORS[0],fox=$('#fox');
+  COLORS.forEach(function(c,i){var b=D.createElement('button');b.type='button';b.style.background=c;b.setAttribute('aria-label','Cor '+(i+1));b.setAttribute('aria-pressed',i===0?'true':'false');b.addEventListener('click',function(){cur=c;$$('button',sw).forEach(function(x){x.setAttribute('aria-pressed','false')});b.setAttribute('aria-pressed','true');$('#hint').textContent='Agora toque numa parte da raposa';});sw.appendChild(b);});
+  $$('.part',fox).forEach(function(p){p.addEventListener('click',function(e){p.style.fill=cur;var r=fox.getBoundingClientRect();burst(e.clientX,e.clientY);p.animate([{transform:'scale(1)'},{transform:'scale(1.04)'},{transform:'scale(1)'}],{duration:300});$('#hint').textContent='Bonito! No app são 12 desenhos assim.';});});
+  /* olhos que seguem o cursor */
+  function eyes(ids,svg,max,cx){var els=ids.map(function(i){return $(i)});D.addEventListener('pointermove',function(e){var r=svg.getBoundingClientRect();if(r.bottom<0||r.top>innerHeight)return;var mx=r.left+r.width/2,my=r.top+r.height/2,dx=e.clientX-mx,dy=e.clientY-my,d=Math.hypot(dx,dy)||1,k=Math.min(1,d/300)*max;els.forEach(function(el){el.style.transform='translate('+(dx/d*k)+'px,'+(dy/d*k)+'px)'});});}
+  if(!reduce){eyes(['#eL','#eR'],fox,5);eyes(['#mE'],$('#mascot'),.8);}
+  /* vogais e números */
+  var VC=['#E8453C','#E8742A','#F4B93B','#2F7A4C','#4DA6D6'],cache={};
+  function play(src,btn){try{var a=cache[src]||(cache[src]=new Audio(src));a.currentTime=0;a.play().catch(function(){});}catch(e){}btn.classList.add('pop');setTimeout(function(){btn.classList.remove('pop')},180);var r=btn.getBoundingClientRect();burst(r.left+r.width/2,r.top+8);}
+  'AEIOU'.split('').forEach(function(l,i){var b=D.createElement('button');b.type='button';b.className='tile';b.style.background=VC[i];b.textContent=l;b.setAttribute('aria-label','Ouvir a vogal '+l);b.addEventListener('click',function(){play('audio/'+l.toLowerCase()+'.wav',b)});$('#vow').appendChild(b);});
+  for(var n=0;n<=10;n++)(function(n){var b=D.createElement('button');b.type='button';b.className='tile n';b.style.background=['#4DA6D6','#7C4DFF','#C2417A','#2F7A4C'][n%4];b.textContent=n;b.setAttribute('aria-label','Ouvir o número '+n);b.addEventListener('click',function(){play('audio/'+n+'.mp3',b)});$('#num').appendChild(b);})(n);
+})();
+</script>
+
+</body>
+</html>
